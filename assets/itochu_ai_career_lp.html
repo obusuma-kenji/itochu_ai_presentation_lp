@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>伊藤忠商事で実現したいこと｜AI社会実装キャリア戦略</title>
+  <meta name="description" content="伊藤忠商事の一次Web面接に向けた、AI×商社×社会課題解決を軸にした志望理由・入社後に挑戦したいこと整理LP" />
+  <style>
+    :root{
+      --navy:#0b1b3f;
+      --blue:#1457d9;
+      --blue2:#0ea5e9;
+      --gold:#d39b2a;
+      --green:#0f766e;
+      --ink:#152036;
+      --muted:#64748b;
+      --line:#dbe3ef;
+      --bg:#f7f9fc;
+      --white:#fff;
+      --red:#dc2626;
+      --shadow:0 20px 50px rgba(11,27,63,.12);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",YuGothic,Meiryo,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.8;}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+    .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(219,227,239,.9)}
+    .nav-inner{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{font-weight:900;letter-spacing:.02em;color:var(--navy);display:flex;align-items:center;gap:10px}
+    .brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--blue2));display:grid;place-items:center;color:white;box-shadow:0 10px 22px rgba(20,87,217,.22)}
+    .nav-links{display:flex;gap:18px;font-size:13px;color:#475569;font-weight:700}
+    .nav-links a:hover{color:var(--blue)}
+    .hero{position:relative;overflow:hidden;background:radial-gradient(circle at 20% 10%,rgba(14,165,233,.24),transparent 30%),radial-gradient(circle at 88% 18%,rgba(211,155,42,.18),transparent 32%),linear-gradient(135deg,#07142f 0%,#0b1b3f 45%,#0d2e6d 100%);color:white;padding:92px 0 72px}
+    .hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+    .hero .wrap{position:relative;z-index:1}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);border-radius:999px;font-size:13px;font-weight:800;color:#dbeafe}
+    h1{font-size:clamp(34px,5vw,62px);line-height:1.16;margin:22px 0 18px;letter-spacing:-.04em}
+    .grad{background:linear-gradient(90deg,#fff 0%,#bfe8ff 48%,#ffe2a3 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:clamp(16px,2.2vw,21px);max-width:850px;color:#d8e6ff;margin:0 0 28px}
+    .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:stretch;margin-top:42px}
+    .hero-card{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius);padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.22);backdrop-filter:blur(14px)}
+    .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+    .kpi{padding:14px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15)}
+    .kpi strong{display:block;font-size:25px;line-height:1.1;color:white}
+    .kpi span{font-size:12px;color:#cbd5e1;font-weight:700}
+    .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:14px;font-weight:900;border:1px solid transparent;transition:.2s}
+    .btn.primary{background:linear-gradient(135deg,#fff,#dbeafe);color:var(--navy)}
+    .btn.secondary{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25);color:white}
+    .btn:hover{transform:translateY(-2px)}
+    section{padding:74px 0}
+    .section-head{margin-bottom:28px}
+    .eyebrow{color:var(--blue);font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+    h2{font-size:clamp(28px,3.8vw,42px);line-height:1.25;letter-spacing:-.04em;margin:0;color:var(--navy)}
+    .sub{color:var(--muted);max-width:840px;margin:14px 0 0;font-size:16px}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.05)}
+    .card h3{margin:8px 0 8px;font-size:21px;color:var(--navy);line-height:1.35}
+    .icon{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:#eff6ff;font-size:25px}
+    .note{border-left:5px solid var(--gold);background:#fffbeb;border-radius:16px;padding:18px 20px;color:#713f12;font-weight:700}
+    .dark{background:linear-gradient(135deg,#07142f,#0b1b3f);color:white;position:relative;overflow:hidden}
+    .dark:before{content:"";position:absolute;inset:auto -120px -180px auto;width:420px;height:420px;border-radius:999px;background:rgba(14,165,233,.2);filter:blur(8px)}
+    .dark h2,.dark h3{color:white}.dark .sub{color:#cbd5e1}.dark .eyebrow{color:#93c5fd}.dark .card{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#e2e8f0}.dark .card p{color:#cbd5e1}
+    .mission{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start;padding:24px;border-radius:24px;background:white;border:1px solid var(--line);box-shadow:0 10px 30px rgba(15,23,42,.05);margin:16px 0}
+    .mission-label{position:sticky;top:88px;padding:18px;border-radius:18px;background:linear-gradient(135deg,#eff6ff,#e0f2fe);font-weight:900;color:var(--navy)}
+    .mission-label small{display:block;color:var(--blue);font-size:12px;letter-spacing:.08em}
+    .pill{display:inline-block;padding:5px 10px;border-radius:999px;background:#e0f2fe;color:#075985;font-size:12px;font-weight:900;margin:4px 4px 4px 0}
+    .timeline{position:relative;display:grid;gap:14px;margin-top:22px}.step{display:grid;grid-template-columns:88px 1fr;gap:16px;align-items:start}.step .time{font-weight:900;color:var(--blue)}.step .body{background:white;border:1px solid var(--line);border-radius:18px;padding:18px}.step h4{margin:0 0 4px;color:var(--navy);font-size:18px}.step p{margin:0;color:#475569}
+    .script-box{background:white;border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow);margin-top:18px}
+    .script-title{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:14px}.script-title h3{margin:0;color:var(--navy)}
+    .copy{border:1px solid var(--line);background:#f8fafc;border-radius:12px;padding:8px 12px;font-weight:900;color:#334155;cursor:pointer}.copy:hover{background:#e0f2fe;color:#075985}
+    .quote{font-size:18px;color:#334155;background:#f8fafc;border-radius:18px;padding:18px;border:1px dashed #cbd5e1}
+    .okng{display:grid;grid-template-columns:1fr 1fr;gap:18px}.ok,.ng{border-radius:22px;padding:22px;border:1px solid var(--line);background:white}.ok h3{color:var(--green)}.ng h3{color:var(--red)}.ok ul,.ng ul{margin:0;padding-left:1.2em}.ok li,.ng li{margin:8px 0}
+    .table-wrap{overflow:auto;background:white;border-radius:24px;border:1px solid var(--line);box-shadow:0 12px 30px rgba(15,23,42,.05)}
+    table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:16px 18px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}th{background:#f1f5f9;color:#0f172a;font-size:13px}td{color:#334155}tr:last-child td{border-bottom:none}
+    .cta{background:linear-gradient(135deg,#0b1b3f,#1457d9);color:white;border-radius:32px;padding:42px;box-shadow:var(--shadow);position:relative;overflow:hidden}.cta:after{content:"";position:absolute;right:-90px;bottom:-140px;width:360px;height:360px;background:rgba(255,255,255,.14);border-radius:999px}.cta h2{color:white}.cta p{color:#dbeafe}.footer{padding:32px 0;color:#64748b;font-size:13px;border-top:1px solid var(--line)}
+    @media(max-width:900px){.nav-links{display:none}.hero-grid,.cards,.mission,.okng{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr}.mission-label{position:static}.step{grid-template-columns:1fr}.cta{padding:28px}.hero{padding-top:70px}}
+    @media print{.nav,.btns,.copy{display:none}section{padding:36px 0}.hero{background:#0b1b3f!important}.card,.script-box,.mission,.table-wrap{box-shadow:none}.wrap{max-width:100%;padding:0 14mm}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand"><span class="brand-mark">AI</span><span>ITOCHU AI Career Strategy</span></div>
+      <div class="nav-links">
+        <a href="#answer">結論</a>
+        <a href="#missions">やりたいこと</a>
+        <a href="#interview">面接台本</a>
+        <a href="#roadmap">入社後ロードマップ</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="badge">一次Web面接対策資料｜伊藤忠商事 後期募集 STEP3通過後</span>
+      <h1><span class="grad">AIで社会の当たり前を変える。</span><br>伊藤忠商事で挑む、次世代の商い。</h1>
+      <p class="lead">日常的にAIを活用している強みを、単なる「AI好き」で終わらせず、伊藤忠商事の持つ商流・データ・AI基盤・グループ会社を使って、労働人口減少、環境問題、原油依存という社会課題の解決に接続するための志望理由・面接準備LPです。</p>
+      <div class="btns">
+        <a class="btn primary" href="#interview">面接で話す内容を見る</a>
+        <a class="btn secondary" href="#missions">入社後に挑戦したいこと</a>
+      </div>
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h2 style="color:white;font-size:28px;margin:0 0 8px">この資料の結論</h2>
+          <p style="color:#dbeafe;margin:0">伊藤忠商事で「AIによる社会のパラダイムシフト」に挑戦できる可能性は高いです。ただし、面接では「AIで世界を変えたい」と抽象的に語るのではなく、伊藤忠らしく、<b>商いの現場で稼ぐ・削る・防ぐを実現し、その結果として社会課題を解く</b>という順番で語ることが重要です。</p>
+        </div>
+        <div class="hero-card">
+          <div class="kpi-grid">
+            <div class="kpi"><strong>227万</strong><span>時間規模のAI業務削減</span></div>
+            <div class="kpi"><strong>400</strong><span>グループ会社規模の実装余地</span></div>
+            <div class="kpi"><strong>3</strong><span>労働・環境・産業OS</span></div>
+          </div>
+          <p style="color:#cbd5e1;font-size:13px;margin:16px 0 0">数字は面接で“根拠ある志望理由”にするための材料です。暗記よりも、自分の言葉に変換することが大切です。</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="answer">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Answer</div>
+          <h2>「どこまで可能か？」への答え</h2>
+          <p class="sub">結論は、かなり現実的です。伊藤忠商事は、AIを研究テーマとして扱う会社ではなく、商売の現場に実装して利益と社会価値を同時に作る会社です。</p>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <div class="icon">🧠</div>
+            <h3>AIを“使う側”から“社会実装する側”へ</h3>
+            <p>日常的にAIを使っている経験は、面接では強みになります。ただし「便利だから使う」では弱く、AIを使って人の仕事、企業活動、社会の仕組みをどう変えるかまで語ると強くなります。</p>
+          </div>
+          <div class="card">
+            <div class="icon">🏢</div>
+            <h3>商社はAI実装の巨大な実験場</h3>
+            <p>伊藤忠には、ファミリーマート、CTC、ベルシステム24、食品卸、エネルギー、素材、物流など、AIを実装できる現場が幅広くあります。ここがIT企業単体との大きな違いです。</p>
+          </div>
+          <div class="card">
+            <div class="icon">🌏</div>
+            <h3>社会課題を“商い”として解ける</h3>
+            <p>労働人口減少、脱炭素、エネルギー最適化、サプライチェーン管理は、社会貢献であると同時に大きなビジネス領域です。伊藤忠の「三方よし」と相性が良いテーマです。</p>
+          </div>
+        </div>
+        <div class="note" style="margin-top:22px">面接でのキーワードは「AIで社会を変えたい」ではなく、「伊藤忠の商いの現場で、AIを使って具体的な課題を解き、収益性と社会性を両立させたい」です。</div>
+      </div>
+    </section>
+
+    <section class="dark" id="why">
+      <div class="wrap" style="position:relative;z-index:1">
+        <div class="section-head">
+          <div class="eyebrow">Why ITOCHU</div>
+          <h2>なぜ、伊藤忠商事なのか</h2>
+          <p class="sub">息子さんの「AIがもたらす将来の社会の利便性に期待している」という志向を、伊藤忠商事の特徴に合わせて整理すると、以下の3点が核になります。</p>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <div class="icon">🦅</div>
+            <h3>イーグルアイ</h3>
+            <p>リテールデータを起点に、消費者理解・需要予測・販売最適化を進める次世代バリューチェーン構想。商社を「モノの仲介」から「社会を最適化するOS」へ進化させる可能性があります。</p>
+          </div>
+          <div class="card">
+            <div class="icon">🤖</div>
+            <h3>i-Colleague / AIエージェント</h3>
+            <p>全社的な生成AI活用により、膨大な業務削減と意思決定支援を進める土台があります。AIを“個人の便利ツール”ではなく、組織の生産性を変える基盤として使える点が魅力です。</p>
+          </div>
+          <div class="card">
+            <div class="icon">💻</div>
+            <h3>CTC・ベルシステム24・AVILEN</h3>
+            <p>商社本体の事業知見と、グループ内のIT・AI・BPO機能がつながっているため、課題発見から開発、運用、横展開まで一気通貫で実装できる可能性があります。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="missions">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Mission</div>
+          <h2>入社後に挑戦したい3つのテーマ</h2>
+          <p class="sub">面接では、壮大な夢だけでなく「どの現場で、どんな価値を、どう生み出すか」まで落とし込むと説得力が出ます。</p>
+        </div>
+
+        <div class="mission">
+          <div class="mission-label"><small>Mission 01</small>労働人口減少をAI実装で補う</div>
+          <div>
+            <span class="pill">i-Colleague</span><span class="pill">Devin</span><span class="pill">Deep Research</span><span class="pill">BPO×AI</span>
+            <h3>人手不足を「我慢」ではなく、AIによる業務再設計で乗り越える</h3>
+            <p>日本では労働人口の減少が進み、企業は人を増やすだけでは成長できない局面に入っています。そこで伊藤忠商事のAI基盤を活用し、グループ会社や取引先に対して、調査、資料作成、受発注、問い合わせ対応、開発、運用監視などをAIエージェント化する。</p>
+            <p><b>面接での言い方：</b>「私は、AIを単なる効率化ツールではなく、日本企業の労働力不足を補う新しい社会インフラにしたいです。伊藤忠商事であれば、自社だけでなくグループ会社、取引先、中堅・中小企業まで実装を広げられると考えています。」</p>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-label"><small>Mission 02</small>環境・エネルギー問題をAIで解く</div>
+          <div>
+            <span class="pill">グリッドシェア</span><span class="pill">蓄電最適化</span><span class="pill">アンモニア</span><span class="pill">Project TREE</span>
+            <h3>脱炭素を理想論で終わらせず、データで動く仕組みにする</h3>
+            <p>太陽光発電、蓄電池、電力需要、物流、燃料、素材のサプライチェーンは複雑です。AIで需要予測・在庫・輸送・充放電・供給網を最適化することで、環境負荷の低減と収益性を両立できます。</p>
+            <p><b>面接での言い方：</b>「環境問題は、個人の意識だけでは解決しきれません。伊藤忠商事のエネルギー・化学品・機械・住生活・情報の事業を横断し、AIでエネルギー利用と供給網を最適化する仕事に挑戦したいです。」</p>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-label"><small>Mission 03</small>商社を社会最適化OSへ進化させる</div>
+          <div>
+            <span class="pill">イーグルアイ</span><span class="pill">ファミリーマート</span><span class="pill">1stパーティデータ</span><span class="pill">横展開</span>
+            <h3>消費者データを起点に、無駄の少ない社会をつくる</h3>
+            <p>ファミリーマートなどの消費者接点、食品・日用品・医薬品卸、物流、メーカーをつなぎ、需要予測と供給の精度を高める。食品ロス、欠品、過剰在庫、配送負荷、人手不足を同時に減らす構想です。</p>
+            <p><b>面接での言い方：</b>「伊藤忠商事の強みは、川下のデータと川上・川中の商流をつなげられることだと思います。私はAIを活用して、売れるものを売れる場所に、必要な量だけ届ける仕組みづくりに関わりたいです。」</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark" id="interview">
+      <div class="wrap" style="position:relative;z-index:1">
+        <div class="section-head">
+          <div class="eyebrow">Interview Script</div>
+          <h2>一次Web面接で使える回答台本</h2>
+          <p class="sub">丸暗記ではなく、本人の言葉に置き換えて使ってください。特に「自分が日常的にAIを使っている経験」を冒頭に入れると自然です。</p>
+        </div>
+
+        <div class="script-box">
+          <div class="script-title"><h3>90秒版：志望理由＋入社後にしたいこと</h3><button class="copy" data-copy="script90">コピー</button></div>
+          <div class="quote" id="script90">私が伊藤忠商事を志望する理由は、AIを単なる効率化ツールではなく、実際の商いの現場に実装し、社会課題の解決までつなげられる会社だと感じたからです。私は普段からAIを活用しており、AIによって人の働き方や企業の意思決定が大きく変わる可能性を強く感じています。特に日本では労働人口の減少が進んでおり、今後は人を増やすだけでなく、AIで業務そのものを再設計することが不可欠だと思っています。伊藤忠商事には、i-Colleagueのような生成AI基盤、CTCなどのデジタル事業群、ファミリーマートをはじめとする消費者接点、そして幅広い商流があります。私はその強みを活かし、AIを使って受発注、需要予測、問い合わせ対応、サプライチェーン最適化などを進め、労働力不足や環境負荷の低減に貢献したいです。単にAIで何かを作るのではなく、伊藤忠らしく、現場の課題を解き、収益性と社会性を両立する仕事に挑戦したいと考えています。</div>
+        </div>
+
+        <div class="script-box">
+          <div class="script-title"><h3>30秒版：短く聞かれたとき</h3><button class="copy" data-copy="script30">コピー</button></div>
+          <div class="quote" id="script30">私は、AIを使って日本の労働人口減少や環境問題を解決する仕事に挑戦したいです。伊藤忠商事は、AI技術だけでなく、ファミリーマート、CTC、エネルギー、食品、物流など、実際にAIを実装できる現場を持っています。だからこそ、AIを机上の技術で終わらせず、商いを通じて社会に広げられると考え、志望しています。</div>
+        </div>
+
+        <div class="script-box">
+          <div class="script-title"><h3>逆質問例</h3><button class="copy" data-copy="questions">コピー</button></div>
+          <div class="quote" id="questions">御社では、i-ColleagueやイーグルアイのようなAI活用が進んでいると理解しています。若手社員がこうしたAI活用やDX推進に関わる場合、最初はどのような現場経験や力を身につけることが期待されますか。<br><br>また、AIによる効率化だけでなく、取引先や社会全体に価値を広げていくうえで、伊藤忠商事の社員に特に求められる姿勢は何でしょうか。</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Roadmap</div>
+          <h2>入社後のキャリア仮説</h2>
+          <p class="sub">「入社したらすぐ社会を変えます」ではなく、伊藤忠らしく現場を学び、商いを理解し、AI実装を広げる段階設計で語ると現実味が出ます。</p>
+        </div>
+        <div class="timeline">
+          <div class="step"><div class="time">1〜3年目</div><div class="body"><h4>現場で商いを学ぶ</h4><p>配属部署で商材、取引先、収益構造、サプライチェーン、現場の非効率を徹底的に理解する。AIで何を変えるべきかを、机上ではなく現場から見つける。</p></div></div>
+          <div class="step"><div class="time">4〜7年目</div><div class="body"><h4>AI実装の小さな成功事例を作る</h4><p>需要予測、資料作成、問い合わせ対応、在庫最適化、エネルギー制御など、担当領域でAI活用を実装し、利益改善・業務削減・環境負荷低減の実績を作る。</p></div></div>
+          <div class="step"><div class="time">8年目以降</div><div class="body"><h4>成功モデルを横展開する</h4><p>自部署で作ったAI活用モデルを、グループ会社や取引先、中堅・中小企業へ広げる。伊藤忠の商流全体を、AIでより効率的で持続可能な仕組みに進化させる。</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="okng">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Interview Check</div>
+          <h2>面接でのOK・NG</h2>
+        </div>
+        <div class="okng">
+          <div class="ng">
+            <h3>NG：抽象的すぎる言い方</h3>
+            <ul>
+              <li>AIで世界を変えたいです。</li>
+              <li>御社は有名で、規模が大きいので志望しました。</li>
+              <li>AIに興味があるので、DX部署に行きたいです。</li>
+              <li>環境問題を解決したいです。</li>
+            </ul>
+          </div>
+          <div class="ok">
+            <h3>OK：伊藤忠らしい言い方</h3>
+            <ul>
+              <li>商いの現場にAIを実装し、収益性と社会性を両立したいです。</li>
+              <li>ファミリーマートなどの川下データと商流をつなげられる点に魅力を感じています。</li>
+              <li>現場を理解したうえで、AI活用を横展開できる人材になりたいです。</li>
+              <li>労働人口減少や環境負荷を、実務の改善として解きたいです。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="matrix">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Message Matrix</div>
+          <h2>やりたいことを面接用に変換する表</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>本人の思い</th><th>伊藤忠の強み</th><th>面接での表現</th><th>実現可能性</th></tr></thead>
+            <tbody>
+              <tr><td>AIで社会にパラダイムシフトを起こしたい</td><td>イーグルアイ、川下データ、幅広い商流</td><td>商社を、モノの仲介から社会を最適化するOSへ進化させる仕事に関わりたい</td><td>高い</td></tr>
+              <tr><td>労働人口減少をAIで補いたい</td><td>i-Colleague、Devin、CTC、ベルシステム24</td><td>AIを使って業務を再設計し、人がより創造的な仕事に集中できる環境を作りたい</td><td>非常に高い</td></tr>
+              <tr><td>環境問題・原油依存を解決したい</td><td>エネルギー、化学品、機械、グリッドシェア、Project TREE</td><td>AIによる需要予測・供給網最適化・蓄電制御で、脱炭素と収益性を両立したい</td><td>高い</td></tr>
+              <tr><td>AIを日常的に使う強みを活かしたい</td><td>全社AI活用、現場主義、若手の実行力</td><td>AIネイティブに近い感覚を活かし、現場課題をAIで解く提案ができる人材になりたい</td><td>高い</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="cta">
+          <h2>最終メッセージ</h2>
+          <p>一次Web面接で大切なのは、知識量を見せることではありません。息子さん自身のAI活用経験を出発点にして、「伊藤忠商事の商いの現場で、AIを使ってどんな課題を解きたいのか」を具体的に語ることです。</p>
+          <p><b>合言葉は、AI × 商い × 三方よし。</b><br>この3つがつながれば、志望理由はかなり強くなります。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">© Interview Strategy LP / ITOCHU AI Career Concept. 本資料は一次Web面接準備用の非公式整理資料です。</div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.copy').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const id=btn.getAttribute('data-copy');
+        const el=document.getElementById(id);
+        const text=el.innerText;
+        navigator.clipboard.writeText(text).then(()=>{
+          const old=btn.textContent;
+          btn.textContent='コピー済み';
+          setTimeout(()=>btn.textContent=old,1400);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

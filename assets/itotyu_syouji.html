@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伊藤忠商事 次世代戦略ダッシュボード</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Warm Neutral & Tech Blue -->
+    <!-- Application Structure Plan: [このSPAは「経営の全体像」「圧倒的な収益基盤」「AIX（独自AI戦略）」「サステナビリティ」の4つのテーマセクションからなるダッシュボード形式を採用しました。レポートの多岐にわたる情報を、ユーザーが上から下へスクロールするだけで「なぜ伊藤忠が強いのか（哲学→数字→テクノロジー→未来）」という論理展開で自然に理解できるように設計しています。各セクションにはインタラクティブな要素（タブやホバーエフェクト、動的チャート）を配置し、能動的な情報探索を促します。] -->
+    <!-- Visualization & Content Choices: [
+      1. 財務目標 (Bar Chart): 純利益の推移を視覚化し、成長性を強調 (Chart.js)。
+      2. セグメント比率 (Doughnut Chart): 非資源分野の圧倒的優位性(約80%)を直感的に比較 (Chart.js)。
+      3. AIX戦略 (Interactive Tabs): 複雑なAI戦略（i-Colleague, Eagle Eye, Devin）をタブ切り替えで整理し、情報過多を防ぎつつ詳細を提示 (Vanilla JS)。
+      4. 全体デザイン (Tailwind + Unicode Icons): SVGを排除し、UnicodeアイコンとCSSスタイルでモダンかつクリーンな情報アーキテクチャを構築。
+    ] -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        /* カスタムカラー設定 */
+        :root {
+            --color-primary: #1e3a8a; /* blue-900 */
+            --color-accent: #d97706; /* amber-600 */
+            --color-bg-base: #fafaf9; /* stone-50 */
+        }
+        body {
+            background-color: var(--color-bg-base);
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+        }
+        
+        /* 必須要件：チャートコンテナのスタイリング */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* アニメーション用クラス */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* タブのトランジション */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in forwards;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-blue-200 selection:text-blue-900">
+
+    <!-- ナビゲーション -->
+    <nav class="fixed w-full bg-white/90 backdrop-blur-md shadow-sm z-50 transition-all duration-300 border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">🏢</span>
+                    <span class="font-bold text-xl tracking-tight text-blue-900">ITOCHU Next-Gen</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#philosophy" class="text-sm font-medium text-slate-600 hover:text-blue-700 transition">三方よし哲学</a>
+                    <a href="#financials" class="text-sm font-medium text-slate-600 hover:text-blue-700 transition">財務基盤</a>
+                    <a href="#aix" class="text-sm font-medium text-slate-600 hover:text-blue-700 transition">AI戦略(AIX)</a>
+                    <a href="#sustainability" class="text-sm font-medium text-slate-600 hover:text-blue-700 transition">未来への布石</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ヒーローセクション -->
+    <header class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center fade-in">
+        <div class="inline-block px-4 py-1.5 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold mb-6">
+            経営戦略 動態的分析レポート 2026
+        </div>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+            非資源型商社の覇権と<br class="hidden md:block">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-cyan-600">次世代バリューチェーンの構築</span>
+        </h1>
+        <p class="mt-4 max-w-2xl text-lg text-slate-600 mb-10">
+            1858年の近江行商から始まった伊藤忠商事は、「三方よし」の精神を核に据えながら、最先端の独自AI戦略とリテールデータを掛け合わせ、産業全体を最適化する「ビジネスOS」へと変貌を遂げようとしています。
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="#financials" class="px-8 py-3 rounded-md bg-blue-700 text-white font-medium hover:bg-blue-800 transition shadow-lg shadow-blue-900/20">
+                財務・実績を見る
+            </a>
+            <a href="#aix" class="px-8 py-3 rounded-md bg-white text-blue-700 border border-blue-200 font-medium hover:bg-blue-50 transition shadow-sm">
+                AI戦略を探索する
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- セクション1: 哲学とアプローチ -->
+        <section id="philosophy" class="py-16 bg-white border-y border-stone-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">「三方よし」の現代的実装</h2>
+                    <p class="mt-4 text-slate-600 max-w-3xl mx-auto">
+                        本セクションでは、伊藤忠商事の強みの源泉である独自の経営理念とアプローチを解説します。創業者の哲学が、現代のデータ主導型経営においてもいかに強力な軸となっているかを理解できます。
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-stone-50 rounded-xl p-8 border border-stone-200 hover:shadow-md transition">
+                        <div class="text-4xl mb-4">🤝</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">三方よし (Sampo-yoshi)</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            「売り手よし、買い手よし、世間よし」。単なる慈善ではなく、自社の利益を追求しつつ、取引先の繁栄と社会の発展を不可分なものとして捉える、持続可能な資本主義の先駆的モデル。
+                        </p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-stone-50 rounded-xl p-8 border border-stone-200 hover:shadow-md transition">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">マーケットイン経営</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            作り手の都合（プロダクトアウト）ではなく、市場のニーズから逆算してビジネスを構築。創業者の「現場主義」に根ざし、消費者に最も近い川下から価値を創出する体制。
+                        </p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-stone-50 rounded-xl p-8 border border-stone-200 hover:shadow-md transition">
+                        <div class="text-4xl mb-4">⚙️</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">合理的なガバナンス</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            1872年の「店法」に由来する先進的なインセンティブ構造。「利益三分主義」に象徴される、成果に対する正当な報いと、アメーバ的で機動性の高い現場主義の組織力。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- セクション2: 財務と事業構造 -->
+        <section id="financials" class="py-20 bg-stone-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">高収益・高効率経営のメカニズム</h2>
+                    <p class="mt-4 text-slate-600 max-w-3xl">
+                        このセクションでは、伊藤忠商事の圧倒的な「稼ぐ力」を定量的なデータと事業構造から読み解きます。資源価格に依存しない安定した収益基盤と、資本効率の高さがどのように実現されているかを可視化します。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- 左カラム: 財務目標チャート -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">「商社三冠」への挑戦と利益成長</h3>
+                        <p class="text-sm text-slate-500 mb-6">連結純利益の推移と2026年3月期の野心的な目標</p>
+                        
+                        <!-- チャートコンテナ -->
+                        <div class="chart-container">
+                            <canvas id="profitChart"></canvas>
+                        </div>
+                        
+                        <div class="mt-6 grid grid-cols-2 gap-4">
+                            <div class="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                                <p class="text-xs text-blue-600 font-semibold uppercase tracking-wider mb-1">圧倒的資本効率</p>
+                                <p class="text-2xl font-bold text-blue-900">15.7<span class="text-sm font-normal">%</span></p>
+                                <p class="text-xs text-slate-500 mt-1">2025年ROE実績 (他社を圧倒)</p>
+                            </div>
+                            <div class="bg-amber-50 rounded-lg p-4 border border-amber-100">
+                                <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider mb-1">株主還元</p>
+                                <p class="text-2xl font-bold text-amber-900">64<span class="text-sm font-normal">%</span></p>
+                                <p class="text-xs text-slate-500 mt-1">総還元性向 (累進配当の徹底)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右カラム: セグメント分析 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">非資源分野の圧倒的優位性</h3>
+                        <p class="text-sm text-slate-500 mb-6">「利は川下にあり」を体現する利益ポートフォリオ構造</p>
+                        
+                        <!-- チャートコンテナ -->
+                        <div class="chart-container">
+                            <canvas id="segmentChart"></canvas>
+                        </div>
+
+                        <div class="mt-6">
+                            <h4 class="font-bold text-sm text-slate-800 mb-3 border-b pb-2">第8カンパニー：マーケットインの象徴</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                2019年に設立された第8カンパニーは、商品軸の縦割りを排し、<strong class="text-blue-700">ファミリーマートを起点とした消費者接点の最大化</strong>を目指す組織です。コンビニを単なる小売店からデジタルプラットフォームへと変貌させる重要な役割を担っています。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- セクション3: AI戦略 (AIX) -->
+        <section id="aix" class="py-20 bg-blue-900 text-white relative overflow-hidden">
+            <!-- 装飾的背景要素 (CSSによる) -->
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-blue-800 opacity-50 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-blue-600 opacity-20 blur-3xl"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="mb-12">
+                    <span class="inline-block px-3 py-1 rounded bg-blue-800 text-blue-200 text-xs font-bold tracking-widest mb-3 border border-blue-700">AI TRANSFORMATION</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">次世代デジタル・AI戦略の深層</h2>
+                    <p class="mt-4 text-blue-100 max-w-3xl leading-relaxed">
+                        壮大なプラットフォーム構想ではなく、「地に足のついた現場の収益力強化（稼ぐ、削る、防ぐ）」に特化した伊藤忠のAIX戦略。本セクションでは、具体的なAIソリューションとその社会実装の仕組みをインタラクティブに探索できます。
+                    </p>
+                </div>
+
+                <!-- インタラクティブ タブUI -->
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- タブメニュー -->
+                    <div class="lg:w-1/3 flex flex-col space-y-2" id="ai-tabs">
+                        <button class="tab-btn active text-left px-6 py-4 rounded-xl font-bold transition-all duration-200 bg-white text-blue-900 shadow-lg border-l-4 border-amber-500" data-target="tab-eagle">
+                            <div class="text-xl mb-1">🦅</div>
+                            次世代OS「イーグルアイ」
+                            <div class="text-xs font-normal opacity-70 mt-1">リテールデータ網の構築</div>
+                        </button>
+                        <button class="tab-btn text-left px-6 py-4 rounded-xl font-bold transition-all duration-200 text-blue-100 hover:bg-blue-800 border-l-4 border-transparent" data-target="tab-icolleague">
+                            <div class="text-xl mb-1">🧠</div>
+                            独自生成AI「i-Colleague」
+                            <div class="text-xs font-normal opacity-70 mt-1">全社2.6万人のAI武装</div>
+                        </button>
+                        <button class="tab-btn text-left px-6 py-4 rounded-xl font-bold transition-all duration-200 text-blue-100 hover:bg-blue-800 border-l-4 border-transparent" data-target="tab-ctc">
+                            <div class="text-xl mb-1">💻</div>
+                            自律型AI & デジタル事業群
+                            <div class="text-xs font-normal opacity-70 mt-1">CTCとの垂直統合モデル</div>
+                        </button>
+                    </div>
+
+                    <!-- タブコンテンツエリア -->
+                    <div class="lg:w-2/3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 lg:p-8">
+                        
+                        <!-- タブ1: イーグルアイ -->
+                        <div id="tab-eagle" class="tab-content active">
+                            <h3 class="text-2xl font-bold text-white mb-4 border-b border-blue-500/50 pb-3 flex items-center">
+                                <span class="mr-3">🦅</span> 巨大データネットワーク「イーグルアイ」
+                            </h3>
+                            <p class="text-blue-50 mb-6 leading-relaxed">
+                                新中期経営計画の柱。単なるツールではなく、商売の意思決定を支援する「OS（基盤）」です。プロダクト中心からリテールデータを核としたソリューション型ビジネスへの転換を意味します。
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-blue-950/50 p-5 rounded-xl border border-blue-800">
+                                    <h4 class="font-bold text-amber-400 mb-2">1stパーティデータの集約</h4>
+                                    <p class="text-sm text-blue-100">
+                                        ファミリーマートの購買データと、「あらた」「アルフレッサ」等の巨大卸網を連携。日本の消費を網羅するデータを集約し、AIインサイトを導出します。
+                                    </p>
+                                </div>
+                                <div class="bg-blue-950/50 p-5 rounded-xl border border-blue-800">
+                                    <h4 class="font-bold text-amber-400 mb-2">パターン化と横展開</h4>
+                                    <p class="text-sm text-blue-100">
+                                        大手企業向けAIソリューションを「型化」し、パートナー網を通じて中堅・中小企業へ横展開。量的拡大と日本社会全体の生産性向上を実現します。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- タブ2: i-Colleague -->
+                        <div id="tab-icolleague" class="tab-content">
+                            <h3 class="text-2xl font-bold text-white mb-4 border-b border-blue-500/50 pb-3 flex items-center">
+                                <span class="mr-3">🧠</span> 全社展開基盤「i-Colleague」
+                            </h3>
+                            <p class="text-blue-50 mb-6 leading-relaxed">
+                                汎用的なChatGPTに加え、独自の大規模言語モデル(LLM)を組み込んだ社内AIプラットフォーム。商社の実務に最適化された的確な回答やキャッチコピー生成を実現。
+                            </p>
+                            <div class="flex items-center gap-6 mb-6 p-5 bg-gradient-to-r from-amber-600 to-amber-500 rounded-xl">
+                                <div class="text-4xl">⏱️</div>
+                                <div>
+                                    <p class="text-amber-100 text-sm font-bold uppercase">驚異の導入成果</p>
+                                    <p class="text-2xl font-extrabold text-white">年間 227万時間 の業務削減</p>
+                                    <p class="text-amber-100 text-sm">従業員 約1,263人分の労働力に相当する効率化を達成。</p>
+                                </div>
+                            </div>
+                            <div class="bg-blue-950/50 p-5 rounded-xl border border-blue-800">
+                                <h4 class="font-bold text-amber-400 mb-2">Deep Research機能</h4>
+                                <p class="text-sm text-blue-100">
+                                    プロのアナリストに匹敵する多角的なWeb調査を自律的に行い、数時間かかるリサーチを十数分で完了。回答には必ず100件以上の参照ソースが明示されます。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- タブ3: CTC・ハイブリッド内製 -->
+                        <div id="tab-ctc" class="tab-content">
+                            <h3 class="text-2xl font-bold text-white mb-4 border-b border-blue-500/50 pb-3 flex items-center">
+                                <span class="mr-3">💻</span> ハイブリッド内製と自律型AI
+                            </h3>
+                            <p class="text-blue-50 mb-6 leading-relaxed">
+                                すべてを外部ベンダーに任せるのではなく、伊藤忠テクノソリューションズ(CTC)の完全子会社化など、「デジタル事業群」を垂直統合し、強力な開発・運用機能を自社グループに保持しています。
+                            </p>
+                            <ul class="space-y-4">
+                                <li class="bg-blue-950/50 p-4 rounded-xl border border-blue-800 flex items-start">
+                                    <span class="text-xl mr-3 mt-1">🤖</span>
+                                    <div>
+                                        <h4 class="font-bold text-amber-400">世界初・自律型AIエンジニア「Devin」</h4>
+                                        <p class="text-sm text-blue-100 mt-1">開発計画の策定から実装、テスト、バグ修正までを自律的に実行。エンジニアを「作業者」から「監督者」へシフトさせています。</p>
+                                    </div>
+                                </li>
+                                <li class="bg-blue-950/50 p-4 rounded-xl border border-blue-800 flex items-start">
+                                    <span class="text-xl mr-3 mt-1">🛡️</span>
+                                    <div>
+                                        <h4 class="font-bold text-amber-400">鉄壁のサイバーセキュリティ内製化</h4>
+                                        <p class="text-sm text-blue-100 mt-1">独自組織「伊藤忠サイバー＆インテリジェンス」が、グループ約400社を対象に年間16万件のアラートを検知し防御しています。</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- セクション4: サステナビリティ -->
+        <section id="sustainability" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-slate-900">未来への布石：サステナビリティ経営</h2>
+                    <p class="mt-4 text-slate-600 max-w-3xl mx-auto">
+                        本セクションでは、脱炭素社会の実現を「コスト」ではなく「巨大なビジネスチャンス」と捉える伊藤忠のクリーンテック戦略を紐解きます。テクノロジーを活用した環境課題の解決への取り組みです。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="group p-8 border-2 border-stone-100 rounded-2xl hover:border-green-500 hover:shadow-lg transition-all duration-300">
+                        <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                            🌱
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">2040年オフセットゼロへ</h3>
+                        <p class="text-slate-600 mb-4 text-sm leading-relaxed">
+                            太陽光、風力、地熱などの再生可能エネルギー持分容量を拡大し、2030年度までに再エネ比率を20%超に引き上げ。クリーンテック分野への投資を強力に推進しています。
+                        </p>
+                        <ul class="text-sm text-slate-500 space-y-2 border-t pt-4">
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> アンモニア燃料船の供給網構築</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 蓄電システム（2030年累計2GWh目標）</li>
+                        </ul>
+                    </div>
+
+                    <div class="group p-8 border-2 border-stone-100 rounded-2xl hover:border-emerald-500 hover:shadow-lg transition-all duration-300">
+                        <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                            🌳
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">Project TREE</h3>
+                        <p class="text-slate-600 mb-4 text-sm leading-relaxed">
+                            天然ゴムの持続可能な供給を目指す世界的な取り組み。ブロックチェーン技術を利用した原産地追跡システムを構築し、森林保全と小規模農家への対価還元を両立。
+                        </p>
+                        <div class="mt-4 bg-stone-50 p-3 rounded-lg border border-stone-200">
+                            <p class="text-xs font-bold text-slate-700">ESG評価</p>
+                            <p class="text-sm text-slate-600">環境省「ESGファイナンス・アワード・ジャパン」金賞受賞等、外部からも極めて高い評価を獲得。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <div class="flex items-center text-white mb-2">
+                    <span class="text-xl mr-2">🏢</span>
+                    <span class="font-bold text-lg">ITOCHU Next-Gen Analysis</span>
+                </div>
+                <p class="text-xs">Based on "伊藤忠商事における経営戦略の動態的分析" Report.</p>
+            </div>
+            <div class="text-sm flex space-x-6">
+                <a href="#" class="hover:text-white transition">Top</a>
+                <a href="#financials" class="hover:text-white transition">Financials</a>
+                <a href="#aix" class="hover:text-white transition">AI Strategy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript ロジック -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. データ設定 (Data Storage) ---
+            const chartColors = {
+                blue: 'rgba(30, 58, 138, 0.8)', // blue-900
+                blueLight: 'rgba(59, 130, 246, 0.8)', // blue-500
+                amber: 'rgba(217, 119, 6, 0.8)', // amber-600
+                stone: 'rgba(168, 162, 158, 0.8)', // stone-400
+                stoneLight: 'rgba(231, 229, 228, 0.8)' // stone-200
+            };
+
+            const profitData = {
+                labels: ['2025年3月期(実績)', '2026年3月期(計画)'],
+                datasets: [{
+                    label: '連結純利益 (億円)',
+                    data: [8003, 9003],
+                    backgroundColor: [chartColors.blueLight, chartColors.blue],
+                    borderRadius: 6,
+                    borderWidth: 0
+                }]
+            };
+
+            const segmentData = {
+                labels: ['非資源分野 (繊維, 情報, 食料など)', '資源分野 (金属, 一部エネルギー)'],
+                datasets: [{
+                    data: [80, 20],
+                    backgroundColor: [chartColors.amber, chartColors.stoneLight],
+                    hoverOffset: 4,
+                    borderWidth: 0
+                }]
+            };
+
+            // --- 2. グラフ描画関数 (Chart.js Configuration) ---
+            // 利益チャート
+            const ctxProfit = document.getElementById('profitChart').getContext('2d');
+            new Chart(ctxProfit, {
+                type: 'bar',
+                data: profitData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // コンテナに依存させるため必須
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toLocaleString() + ' 億円';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 10000,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                // 16文字折り返しロジックの簡易実装
+                                callback: function(value) {
+                                    let label = this.getLabelForValue(value);
+                                    if(label.length > 10) {
+                                        return label.match(/.{1,10}/g); // 10文字で改行(表示幅調整)
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // セグメントチャート
+            const ctxSegment = document.getElementById('segmentChart').getContext('2d');
+            new Chart(ctxSegment, {
+                type: 'doughnut',
+                data: segmentData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // コンテナに依存させるため必須
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 20, font: { size: 12 } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': 約' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- 3. タブ切り替えロジック (Functional Navigation & State) ---
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // 状態リセット
+                    tabBtns.forEach(b => {
+                        b.classList.remove('bg-white', 'text-blue-900', 'shadow-lg', 'border-amber-500');
+                        b.classList.add('text-blue-100', 'border-transparent');
+                    });
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    // アクティブ化
+                    btn.classList.add('bg-white', 'text-blue-900', 'shadow-lg', 'border-amber-500');
+                    btn.classList.remove('text-blue-100', 'border-transparent');
+                    
+                    const targetId = btn.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // --- 4. スクロール時のヘッダー制御 (UI Polish) ---
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('shadow-md');
+                    nav.classList.remove('shadow-sm');
+                } else {
+                    nav.classList.remove('shadow-md');
+                    nav.classList.add('shadow-sm');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
